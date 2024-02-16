@@ -4,11 +4,11 @@ import Task from '../models/taskModel.js';
 
 const taskRouter = express.Router();
 
-taskRouter.get('/', async (req, res) => {
+taskRouter.get('/tasks', async (req, res) => {
   res.status(200).send(data.tasks);
 });
 
-taskRouter.get('/:id', (req, res) => {
+taskRouter.get('/tasks/:id', (req, res) => {
   const task = data.tasks.find((p) => p.id === req.params.id);
   if (task) {
     res.status(200).send(task);
@@ -18,7 +18,7 @@ taskRouter.get('/:id', (req, res) => {
 });
 
 taskRouter.post(
-  '/',
+  '/tasks',
   expressAsyncHandler(async (req, res) => {
     const newTask = new Task({
       due_date: req.body.due_date,
@@ -31,7 +31,7 @@ taskRouter.post(
 );
 
 taskRouter.update(
-  '/:id',
+  '/tasks/:id',
   expressAsyncHandler(async (req, res) => {
     const newid = req.params.id;
     const newTask = new Task({
@@ -40,6 +40,15 @@ taskRouter.update(
     });
     const task = await newTask.update(newid);
     res.status(200).send({ message: 'The task is updated', task });
+  })
+);
+
+taskRouter.delete(
+  '/tasks/:id',
+  expressAsyncHandler(async (req, res) => {
+    const newid = req.params.id;
+    const task = await newTask.delete(newid);
+    res.status(200).send({ message: 'The task is deleted', task });
   })
 );
 
